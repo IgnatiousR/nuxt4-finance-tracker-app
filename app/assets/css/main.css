@@ -1,0 +1,61 @@
+@import "tailwindcss";
+@import "@nuxt/ui";
+@tailwind utilities;
+
+@layer utilities {
+  .wrapper {
+    @apply max-w-7xl lg:mx-auto p-5 md:px-10 w-full;
+  }
+
+  .flex-start {
+    @apply flex justify-start items-center;
+  }
+  .flex-center {
+    @apply flex justify-center items-center;
+  }
+
+  .flex-between {
+    @apply flex justify-between items-center;
+  }
+
+  .green {
+    @apply text-green-600 dark:text-green-400;
+  }
+
+  .red {
+    @apply text-red-600 dark:text-red-400;
+  }
+
+  .h1-bold {
+    @apply font-bold text-3xl lg:text-4xl;
+  }
+
+  .h2-bold {
+    @apply font-bold text-2xl lg:text-3xl;
+  }
+
+  .h3-bold {
+    @apply font-bold text-xl lg:text-2xl;
+  }
+}
+
+:root {
+  /* --ui-radius: 0.25rem;
+  --ui-container: 90rem; */
+  --ui-border: var(--ui-color-neutral-200);
+  --ui-bg: var(--ui-color-neutral-100);
+  --ui-text: var(--ui-color-neutral-900);
+}
+.dark {
+  --ui-bg: var(--ui-color-neutral-950);
+  --ui-text: var(--ui-color-neutral-50);
+  --ui-border: var(--ui-color-neutral-800);
+}
+
+body {
+  font-family: "Bai Jamjuree";
+}
+
+/* @theme {
+  --font-bai: "Bai Jamjuree", sans-serif;
+} */
