@@ -26,7 +26,12 @@
             content: 'w-48',
           }"
         >
-          <UButton icon="lucide:ellipsis" color="neutral" variant="ghost" />
+          <UButton
+            icon="lucide:ellipsis"
+            color="neutral"
+            variant="ghost"
+            :loading="isLoading"
+          />
         </UDropdownMenu>
       </div>
     </div>
@@ -35,6 +40,8 @@
 
 <script setup lang="ts">
 import type { DropdownMenuItem } from "@nuxt/ui";
+const supabaseCli = useSupabaseClient();
+const toast = useToast();
 
 const props = defineProps({
   transaction: {
@@ -49,6 +56,35 @@ const props = defineProps({
     }),
   },
 });
+
+const isLoading = ref(false);
+const deleteTransaction = async () => {
+  isLoading.value = true;
+  try {
+    await supabaseCli
+      .from("transactions")
+      .delete()
+      .eq("id", props.transaction.id);
+    toast.add({
+      title: "Transaction deleted successfully.",
+      icon: "lucide:circle-check",
+      color: "success",
+    });
+  } catch (error) {
+    console.log(error);
+    toast.add({
+      title: "Deleted successfully.",
+      icon: "lucide:circle-alert",
+      color: "error",
+    });
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+// const deleteTransaction = () => {
+//   console.log("Pressed");
+// };
 
 const isIncome = computed(() => props.transaction.type === "Income");
 
@@ -67,14 +103,14 @@ const items = ref<DropdownMenuItem[]>([
     label: "Edit",
     icon: "lucide:square-pen",
     onSelect() {
-      console.log("Edit pressed");
+      console.log("Edittedd");
     },
   },
   {
     label: "Delete",
     icon: "lucide:trash-2",
     onSelect() {
-      console.log("Deleted");
+      deleteTransaction();
     },
   },
 ]);
