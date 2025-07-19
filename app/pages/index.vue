@@ -78,6 +78,7 @@ const { data } = await useAsyncData("transactions", async () => {
 transactions.value = data.value;
 
 const transactionsGroupByDate = computed(() => {
+  // eslint-disable-next-line prefer-const
   let groupedByDate = {};
 
   for (const transaction of transactions.value) {
@@ -93,6 +94,6 @@ const transactionsGroupByDate = computed(() => {
   return groupedByDate;
 });
 
-console.log(transactionsGroupByDate.value);
+//console.log(transactionsGroupByDate.value);
 // console.log(data);
 </script>
