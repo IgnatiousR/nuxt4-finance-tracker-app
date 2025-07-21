@@ -18,31 +18,31 @@
         title="Income"
         :amount="4000"
         :last-amount="3000"
-        :loading="false"
+        :loading="isLoading"
       />
       <AppTrend
         color="green"
         title="Income"
         :amount="4000"
         :last-amount="3000"
-        :loading="true"
+        :loading="isLoading"
       />
       <AppTrend
         color="red"
         title="Income"
         :amount="4000"
         :last-amount="7000"
-        :loading="false"
+        :loading="isLoading"
       />
       <AppTrend
         color="green"
         title="Income"
         :amount="4000"
         :last-amount="3000"
-        :loading="false"
+        :loading="isLoading"
       />
     </section>
-    <section>
+    <section v-if="!isLoading">
       <div
         v-for="(transactionsOnDay, date) in transactionsGroupByDate"
         :key="date"
@@ -56,8 +56,12 @@
           v-for="transaction in transactionsOnDay"
           :key="transaction.id"
           :transaction="transaction"
+          @deleted="refreshTransactions()"
         />
       </div>
+    </section>
+    <section v-else>
+      <USkeleton v-for="i in 4" :key="i" class="h-8 w-full mb-2" />
     </section>
   </div>
 </template>
@@ -68,14 +72,50 @@ import { transactionViewOptions } from "~/constants";
 const selectedView = ref("Yearly");
 const supabaseCli = useSupabaseClient();
 const transactions = ref([]);
+const isLoading = ref(false);
 
-const { data } = await useAsyncData("transactions", async () => {
-  const { data, error } = await supabaseCli.from("transactions").select();
-  if (error) return [];
-  return data;
-});
+// const fetchTransactions = async () => {
+//   isLoading.value = true;
+//   try {
+//     // const { data } = await useFetch('/api/count')
+//     const { data } = await useAsyncData(
+//       "transactions",
+//       async () => {
+//         const { data, error } = await supabaseCli.from("transactions").select();
+//         if (error) return [];
+//         return data;
+//       }
+//       // {
+//       //   server: false,
+//       //   lazy: true,
+//       // }
+//     );
+//     return data.value;
+//   } finally {
+//     isLoading.value = false;
+//   }
+// };
 
-transactions.value = data.value;
+const fetchTransactions = async () => {
+  isLoading.value = true;
+  try {
+    const { data, error } = await supabaseCli.from("transactions").select();
+    if (error) {
+      console.error("Supabase error:", error);
+      return [];
+    }
+    return data;
+  } finally {
+    isLoading.value = false;
+  }
+};
+
+const refreshTransactions = async () => {
+  transactions.value = await fetchTransactions();
+  console.log("refreshed");
+};
+
+await refreshTransactions();
 
 const transactionsGroupByDate = computed(() => {
   // eslint-disable-next-line prefer-const

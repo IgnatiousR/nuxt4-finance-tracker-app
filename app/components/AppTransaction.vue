@@ -57,6 +57,8 @@ const props = defineProps({
   },
 });
 
+const emit = defineEmits(["deleted"]);
+
 const isLoading = ref(false);
 const deleteTransaction = async () => {
   isLoading.value = true;
@@ -70,6 +72,8 @@ const deleteTransaction = async () => {
       icon: "lucide:circle-check",
       color: "success",
     });
+    emit("deleted", props.transaction.id);
+    console.log("deleted");
   } catch (error) {
     console.log(error);
     toast.add({
