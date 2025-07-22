@@ -11,11 +11,16 @@
         <div>Links</div>
       </div> -->
       <!-- <UAvatar src="https://github.com/benjamincanac.png" /> -->
-      <div
-        class="w-8 h-8 flex items-center justify-center text-neutral-800 rounded-full bg-neutral-200"
-      >
-        {{ firstInitial }}
+
+      <div class="flex items-center space-x-2">
+        <!-- <ColorModeSelector/> -->
+        <div
+          class="w-8 h-8 flex items-center justify-center text-neutral-800 rounded-full bg-neutral-200"
+        >
+          {{ firstInitial }}
+        </div>
       </div>
+      
     </div>
   </header>
 </template>
