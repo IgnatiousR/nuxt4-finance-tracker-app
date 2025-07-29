@@ -16,7 +16,7 @@
       <AppTrend
         color="green"
         title="Income"
-        :amount="4000"
+        :amount="incomeTotal"
         :last-amount="3000"
         :loading="isLoading"
       />
@@ -29,8 +29,8 @@
       />
       <AppTrend
         color="red"
-        title="Income"
-        :amount="4000"
+        title="Expense"
+        :amount="expenseTotal"
         :last-amount="7000"
         :loading="isLoading"
       />
@@ -41,6 +41,17 @@
         :last-amount="3000"
         :loading="isLoading"
       />
+    </section>
+
+    <section class="flex justify-between mb-10">
+      <div>
+        <h2 class="text-2xl font-extrabold">Transactions</h2>
+        <div class="text-neutral=500 dark:text-gray-400">
+          You have {{ incomeCount }} incomes and {{ expenseCount }} expenses
+          this period
+        </div>
+      </div>
+      <div>Right</div>
     </section>
     <section v-if="!isLoading">
       <div
@@ -77,7 +88,6 @@ const isLoading = ref(false);
 // const fetchTransactions = async () => {
 //   isLoading.value = true;
 //   try {
-//     // const { data } = await useFetch('/api/count')
 //     const { data } = await useAsyncData(
 //       "transactions",
 //       async () => {
@@ -95,6 +105,24 @@ const isLoading = ref(false);
 //     isLoading.value = false;
 //   }
 // };
+
+const income = computed(() =>
+  transactions.value.filter((t) => t.type === "Income")
+);
+
+const expense = computed(() =>
+  transactions.value.filter((t) => t.type === "Expense")
+);
+
+const incomeCount = computed(() => income.value.length);
+const expenseCount = computed(() => expense.value.length);
+
+const incomeTotal = computed(() =>
+  income.value.reduce((sum, transaction) => sum + transaction.amount, 0)
+);
+const expenseTotal = computed(() =>
+  expense.value.reduce((sum, transaction) => sum + transaction.amount, 0)
+);
 
 const fetchTransactions = async () => {
   isLoading.value = true;
